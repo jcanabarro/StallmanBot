@@ -28,3 +28,10 @@ class BasicActions:
 
     def download_photo(self, path):
         urllib.request.urlretrieve("https://rms.sexy/" + path, "." + path)
+
+    def delete_photo(self, path):
+        pass
+
+    def format_image_path(self, path):
+        position = path.find("src=\"/img/")
+        return path[position:].split(" ")[0][5:-1]

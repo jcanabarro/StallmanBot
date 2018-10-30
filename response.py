@@ -10,8 +10,8 @@ class Response:
     def __init__(self):
         self.URL = BotConfiguration.BOT_URL
         self.bot_basic_action = BasicActions()
-        self.pressed_item = False
         self.TOKEN = BotConfiguration.TOKEN
+        self.reserved_words = ['/nudes', '/god', '/stallman', '/rms']
 
     def get_updates(self, offset=None):
         url = self.URL + "getUpdates?timeout=100"
@@ -31,13 +31,11 @@ class Response:
             text = update["message"]["text"]
             chat = update["message"]["chat"]["id"]
             response_array = [token for token in text.split(" ")]
-
-            if response_array[0] == '/nudes' or response_array[0] == '/god':
-                response = self.bot_basic_action.get_rms("https://rms.sexy/?js")
-                position = response.find("src=\"/img/")
-                response = response[position:].split(" ")[0][5:-1]
-                self.bot_basic_action.download_photo(response)
-                self.send_image(chat, response)
+            if response_array[0] in self.reserved_words:
+                image_path = self.bot_basic_action.get_rms("https://rms.sexy/?js")
+                formatted_path = self.bot_basic_action.format_image_path(image_path)
+                self.bot_basic_action.download_photo(formatted_path)
+                self.send_image(chat, formatted_path)
 
     def send_message(self, text, chat_id, reply_markup=None):
         text = urllib.parse.quote_plus(text)
@@ -47,7 +45,7 @@ class Response:
         self.bot_basic_action.get_url(url)
 
     def send_image(self, chat_id, path):
-        url = "https://api.telegram.org/" + self.TOKEN + "/sendPhoto"
+        url = "https://api.telegram.org/bot" + self.TOKEN + "/sendPhoto"
         files = {'photo': open("." + path, 'rb')}
         data = {'chat_id': str(chat_id)}
         requests.post(url, files=files, data=data)
