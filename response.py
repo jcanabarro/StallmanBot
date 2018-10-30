@@ -49,6 +49,8 @@ class Response:
                 self.send_message("I'm just joking, I'll not /help you", chat)
             elif response_array[0] == '/donate':
                 self.send_message("If you want to donate to FSF click here: https://my.fsf.org/donate/", chat)
+            elif response_array[0] == '/github':
+                self.send_message("My code is available in this github: https://github.com/jcanabarro/StallmanBot", chat)
             else:
                 continue
 
