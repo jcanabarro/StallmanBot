@@ -28,6 +28,9 @@ class Response:
 
     def handle_updates(self, updates):
         for update in updates["result"]:
+            # if update["message"]["chat"]["type"] == "group":
+            #     continue
+            # else:
             text = update["message"]["text"]
             chat = update["message"]["chat"]["id"]
             response_array = [token for token in text.split(" ")]
@@ -36,6 +39,18 @@ class Response:
                 formatted_path = self.bot_basic_action.format_image_path(image_path)
                 self.bot_basic_action.download_photo(formatted_path)
                 self.send_image(chat, formatted_path)
+                self.bot_basic_action.clean_folder()
+            elif response_array[0] == '/help':
+                self.send_message("Try to use /god or /stallman", chat)
+            elif response_array[0] == '/start':
+                self.send_message("Welcome to the magic Richard Matthew Stallman Bot, you can send /list to show "
+                                  "the available commands", chat)
+            elif response_array[0] == '/list':
+                self.send_message("I'm just joking, I'll not /help you", chat)
+            elif response_array[0] == '/donate':
+                self.send_message("If you want to donate to FSF click here: https://my.fsf.org/donate/", chat)
+            else:
+                continue
 
     def send_message(self, text, chat_id, reply_markup=None):
         text = urllib.parse.quote_plus(text)

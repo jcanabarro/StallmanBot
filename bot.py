@@ -1,6 +1,9 @@
 import json
 import requests
 import urllib.request
+import shutil
+import os
+import time
 
 
 class BasicActions:
@@ -29,8 +32,11 @@ class BasicActions:
     def download_photo(self, path):
         urllib.request.urlretrieve("https://rms.sexy/" + path, "." + path)
 
-    def delete_photo(self, path):
-        pass
+    def clean_folder(self):
+        time.sleep(1)
+        shutil.rmtree("img/")
+        if not os.path.exists("img/"):
+            os.makedirs("img/")
 
     def format_image_path(self, path):
         position = path.find("src=\"/img/")
