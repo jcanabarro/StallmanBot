@@ -14,7 +14,7 @@ class BasicActions:
         return str(requests.get(url).content)
 
     def download_photo(self, path):
-        urllib.request.urlretrieve("https://rms.sexy/" + path, "." + path)
+        urllib.request.urlretrieve("https://rms.sexy" + path, "." + path)
 
     def clean_folder(self):
         time.sleep(1)
